@@ -15,9 +15,10 @@ export default {
   subscriptions: function () {
     this.makeRequest$ = new Subject()
     this.makeRequest$.pipe(
-      tap(() => this.$router.push({name: 'loading', params: {}})),
+      tap(() => this.$store.dispatch('navigate', { scene: 'loading' })),
       switchMap(() => APIClient.request())
-    ).subscribe(x => this.$router.push({name: 'success', params: {}}), err => this.$router.push({name: 'error', params: {}}))
+    ).subscribe(() => this.$store.dispatch('navigate', { scene: 'success' })),
+    err => this.$store.dispatch('navigate', { scene: 'error' })
   },
   data () {
     return {
